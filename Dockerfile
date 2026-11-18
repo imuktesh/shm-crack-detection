@@ -3,9 +3,9 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# System dependencies
+# System dependencies (FIXED: replaced libgl1-mesa-glx with libgl1)
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -18,7 +18,7 @@ COPY app.py .
 COPY best_resnet18_sdnet.pth .
 COPY best_unet_v2.pth .
 
-# Expose port (Render uses PORT env variable)
+# Expose port
 EXPOSE 7860
 
 # Run the app
