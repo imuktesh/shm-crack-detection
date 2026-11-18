@@ -1,0 +1,25 @@
+
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# System dependencies
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app files and models
+COPY app.py .
+COPY best_resnet18_sdnet.pth .
+COPY best_unet_v2.pth .
+
+# Expose port (Render uses PORT env variable)
+EXPOSE 7860
+
+# Run the app
+CMD ["python", "app.py"]
