@@ -3,11 +3,16 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# System dependencies (FIXED: replaced libgl1-mesa-glx with libgl1)
+# System dependencies
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
+
+# Set environment variables to limit memory usage
+ENV OMP_NUM_THREADS=2
+ENV MKL_NUM_THREADS=2
+ENV TORCH_NUM_THREADS=2
 
 # Python dependencies
 COPY requirements.txt .
